@@ -10,7 +10,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Homepage/>}/>
-          <Route path='/auth' element={<Chatpage/>}/>
+          <Route path='/chatpage' element={<Chatpage/>}/>
         </Routes>
       </BrowserRouter>      
     </div>
