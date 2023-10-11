@@ -6,13 +6,15 @@ import Chatpage from './pages/Chatpage';
 function App() {
 
   return (
-    <div className='App'>
+    <div className="app" >
+      
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Homepage/>}/>
           <Route path='/chatpage' element={<Chatpage/>}/>
         </Routes>
-      </BrowserRouter>      
+      </BrowserRouter>
+   
     </div>
   )
 }
