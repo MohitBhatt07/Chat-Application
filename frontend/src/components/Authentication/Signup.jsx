@@ -1,139 +1,104 @@
-import React from 'react'
+import React, { useState } from "react";
+import Person from "@mui/icons-material/Person";
+import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import HttpsOutlinedIcon from "@mui/icons-material/HttpsOutlined";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const Signup = () => {
+  const [name,setName] = useState();
+  const [show, setShow] = useState(false);
+  const [showConfirm ,setShowConfirm] = useState(false);
+  const [pic,setPic] = useState();
+  const [email,setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [confirmPassword , setConfirmPassword] = useState();
+  
+  const showHandler = ()=>{
+    setShow((prev)=>!prev);
+  }
+  const showConfirmHandler = ()=>{
+    setShowConfirm((prev) => !prev);
+  }
+  const submitHandler = (event)=>{
+    event.preventDefault();
+  }
   return (
-    <form className="w-full h-full max-w-md">
+    <form className="w-full h-full max-w-md mx-auto" onSubmit={submitHandler}>
       <div className="relative flex items-center mt-4">
-            <span className="absolute">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-            </span>
+        <span className="absolute">
+          <Person className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500" />
+        </span>
 
-            <input
-              type="text"
-              className="block w-full py-2 text-gray-700 bg-white border  border-blue-300 rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-              placeholder="Username"
-            />
-          </div>
+        <input
+          type="text"
+          className="block w-full py-2 text-gray-700 bg-white border  border-blue-300 rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+          placeholder="Username"
+          onChange={(e)=>setName(e.target.value)}
+        />
+      </div>
 
-          <label
-            for="dropzone-file"
-            className="flex items-center px-3 py-2 mx-auto mt-6 text-center border-blue-300 bg-white border-2 border-dashed rounded-lg cursor-pointer dark:border-gray-600 dark:bg-gray-900"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-6 h-6 text-gray-300 dark:text-gray-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-              />
-            </svg>
+      <label
+        htmlFor="dropzone-file"
+        className="flex items-center px-3 py-2 mx-auto mt-3 text-center border-blue-300 bg-white border-2 border-dashed rounded-lg cursor-pointer dark:border-gray-600 dark:bg-gray-900"
+      >
+        <DriveFolderUploadIcon className="w-6 h-6 text-gray-300 dark:text-gray-500" />
 
-            <h2 className="mx-3 text-gray-400">Profile Photo</h2>
+        <h2 className="mx-3 text-gray-400">Profile Photo</h2>
 
-            <input id="dropzone-file" type="file" className="hidden" />
-          </label>
+        <input id="dropzone-file" type="file" className="hidden" onChange={(e)=>setPic(e.target.value)}/>
+      </label>
 
-          <div className="relative flex items-center mt-3">
-            <span className="absolute">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                />
-              </svg>
-            </span>
+      <div className="relative flex items-center mt-2">
+        <span className="absolute">
+          <EmailOutlinedIcon className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500" />
+        </span>
 
-            <input
-              type="email"
-              className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-              placeholder="Email address"
-            />
-          </div>
+        <input
+          type="email"
+          className="block w-full py-2 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+          placeholder="Email address"
+          onChange={(e)=>setEmail(e.target.value)}
+        />
+      </div>
 
-          <div className="relative flex items-center mt-4">
-            <span className="absolute">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                />
-              </svg>
-            </span>
+      <div className="relative flex items-center mt-2">
+        <span className="absolute">
+          <HttpsOutlinedIcon className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500" />
+        </span>
 
-            <input
-              type="password"
-              className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-              placeholder="Password"
-            />
-          </div>
+        <input
+          type={show ?"text" :"password"}
+          className="block w-full px-10 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+          placeholder="Password"
+          onChange={(e)=>setPassword(e.target.value)}
+        />
+        <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 " onClick={showHandler}>
+          {show ? <VisibilityIcon/> : <VisibilityOffIcon/> }
+        </div>
+      </div>
 
-          <div className="relative flex items-center mt-4">
-            <span className="absolute">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                />
-              </svg>
-            </span>
+      <div className="relative flex items-center mt-2">
+        <span className="absolute">
+          <HttpsOutlinedIcon className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500" />
+        </span>
 
-            <input
-              type="password"
-              className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-              placeholder="Confirm Password"
-            />
-          </div>
-          <button
-              className={`w-1/3 pb-4 font-medium text-center text-gray-800 capitalize border-b-2 border-blue-500 dark:border-blue-400 dark:text-white`}
-              
-            >
-              sign up
-            </button>
+        <input
+          type={showConfirm ?"text" :"password"}
+          className="block w-full px-10 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+          placeholder="Confirm Password"
+          onChange={(e)=>setConfirmPassword(e.target.value)}
+        />
+        <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 " onClick={showConfirmHandler}>
+          {showConfirm ? <VisibilityIcon/> : <VisibilityOffIcon/> }
+        </div>
+      </div>
+      <button type="submit" className="w-full px-6 py-3 text-sm font-medium mt-6 tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+        Sign Up
+      </button>
     </form>
-  )
-}
+  );
+};
 
-export default Signup
+export default Signup;
