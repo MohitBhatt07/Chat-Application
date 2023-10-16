@@ -5,6 +5,7 @@ const app = express();
 const cors = require('cors');
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes")
+const {notFound , errorHandler} = requier("./middleware/errorMiddleware");
 
 app.use(cors());
 app.use(express.json());
@@ -15,6 +16,7 @@ app.get("/", (req, res) => {
 });   
 
 app.use('/api/user' , userRoutes);
-
+app.use(notFound);
+app.use(errorHandler);
 const port = process.env.PORT || 5000;
 app.listen(port,()=>console.log(`server started at localhost:${port}`));
