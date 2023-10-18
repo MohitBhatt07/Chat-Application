@@ -7,7 +7,9 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes")
 const {notFound , errorHandler} = require("./middleware/errorMiddleware");
 
-app.use(cors());
+app.use(cors({
+  origin : "http://localhost:5173"
+}));
 app.use(express.json());
 dotenv.config();
 connectDB();

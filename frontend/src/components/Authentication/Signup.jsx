@@ -5,22 +5,65 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import HttpsOutlinedIcon from "@mui/icons-material/HttpsOutlined";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import {toast} from "react-toastify";
 
 const Signup = () => {
-  const [name,setName] = useState();
+  const [name,setName] = useState("");
   const [show, setShow] = useState(false);
   const [showConfirm ,setShowConfirm] = useState(false);
   const [pic,setPic] = useState();
   const [email,setEmail] = useState();
   const [password, setPassword] = useState();
   const [confirmPassword , setConfirmPassword] = useState();
-  
+  const [loading, setLoading] = useState(false);
+  const cloudinaryApi = import.meta.env.CLOUDINARY_API;
+  console.log(cloudinaryApi);
+
   const showHandler = ()=>{
     setShow((prev)=>!prev);
   }
   const showConfirmHandler = ()=>{
     setShowConfirm((prev) => !prev);
   }
+  const postDetails = (pic) => {
+    setLoading(true);
+    if (pic === undefined) {
+      toast.error("invalid picture");
+      return;
+    }
+    console.log(pic);
+    if(pic.type === "image/jpeg" || pic.type === "image/png" || pic.type === "image/jpg"){
+      const data = new FormData();
+      data.append("file",pic);
+      data.append("upload_preset" ,"Chat-app");
+      data.append("cloud_name","mohitbhatt");
+
+      const fetchHandler = async()=>{
+        const fetchData = await fetch(cloudinary_api, {
+        method : "post",
+        body : data,
+      });
+      
+      const jsonData = await fetchData.json();
+      console.log(jsonData);
+      setPic(jsonData.url.toString());
+      setLoading(false);
+      }
+
+      try{
+        fetchHandler();
+      }
+      catch(err){
+        console.log(err);
+        setLoading(false);
+      }
+    }
+  
+    else{
+      toast.error('please select image');
+      setLoading(false);
+    }
+  };
   const submitHandler = (event)=>{
     event.preventDefault();
   }
@@ -47,7 +90,7 @@ const Signup = () => {
 
         <h2 className="mx-3 text-gray-400">Profile Photo</h2>
 
-        <input id="dropzone-file" type="file" className="hidden" onChange={(e)=>setPic(e.target.value)}/>
+        <input id="dropzone-file" type="file" className="hidden" onChange={(e)=>postDetails(e.target.files[0])}/>
       </label>
 
       <div className="relative flex items-center mt-2">
@@ -94,7 +137,7 @@ const Signup = () => {
           {showConfirm ? <VisibilityIcon/> : <VisibilityOffIcon/> }
         </div>
       </div>
-      <button type="submit" className="w-full px-6 py-3 text-sm font-medium mt-6 tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+      <button  type="submit" className="w-full px-6 py-3 text-sm font-medium mt-6 tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
         Sign Up
       </button>
     </form>

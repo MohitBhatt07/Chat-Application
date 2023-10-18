@@ -14,12 +14,7 @@ const Login = () => {
   const showHandler = () => {
     setShow((prev) => !prev);
   };
-  const postDetails = () => {
-    setLoading(true);
-    if (pic == undefined) {
-      toast("error");
-    }
-  };
+  
   const submitHandler = (event) => {
     event.preventDefault();
   };
@@ -65,22 +60,7 @@ const Login = () => {
           Sign in
         </button>
       </div>
-      <button
-        onClick={() =>
-          toast("🦄 Wow so easy!", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          })
-        }
-      >
-        CLick ME
-      </button>
+      
       
     </form>
   );

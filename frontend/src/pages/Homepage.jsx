@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Signup from "../components/Authentication/Signup";
 import Login from "../components/Authentication/Login";
 import Logo from '../assets/chatAppLogo.jpg';
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 const Homepage = () => {
   const [isSignup ,setIsSignup] = useState(true);
@@ -36,18 +36,7 @@ const Homepage = () => {
 
           {isSignup ?<Signup/> : <Login/>}
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+      
     </section>
   );
 };
