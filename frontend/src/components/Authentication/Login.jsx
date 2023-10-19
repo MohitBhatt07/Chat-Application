@@ -3,9 +3,11 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import HttpsOutlinedIcon from "@mui/icons-material/HttpsOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { ToastContainer, toast } from "react-toastify";
-
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const Login = () => {
+  const navigate = useNavigate();
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
   const [show, setShow] = useState(false);
@@ -15,8 +17,37 @@ const Login = () => {
     setShow((prev) => !prev);
   };
   
-  const submitHandler = (event) => {
+  const submitHandler = async(event) => {
+    
     event.preventDefault();
+    setLoading(true);
+    if (!email || !password) {
+      toast.error("Please fill all the fields");
+      setLoading(false);
+      return;
+    }
+    
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+      const cont = {email,password};
+      const data = await axios.post(
+        "/api/user/login",
+        JSON.stringify(cont),
+        config
+      );
+      console.log(data);
+      toast.success("LOGIN SUCCESSFULL");
+      localStorage.setItem('userInfo',JSON.stringify(data));
+      setLoading(false);
+      navigate("/chatpage");
+    } catch (err) {
+      toast.error(`${err}`);
+      setLoading(false);
+    }
   };
   return (
     <form className="w-full max-w-md mx-auto" onSubmit={submitHandler}>
