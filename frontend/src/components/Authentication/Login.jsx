@@ -21,6 +21,7 @@ const Login = () => {
     
     event.preventDefault();
     setLoading(true);
+    
     if (!email || !password) {
       toast.error("Please fill all the fields");
       setLoading(false);
@@ -33,13 +34,12 @@ const Login = () => {
           "Content-type": "application/json",
         },
       };
-      const cont = {email,password};
-      const data = await axios.post(
+      
+      const {data} = await axios.post(
         "/api/user/login",
-        JSON.stringify(cont),
-        config
+        {email,password},
+        config[0]
       );
-      console.log(data);
       toast.success("LOGIN SUCCESSFULL");
       localStorage.setItem('userInfo',JSON.stringify(data));
       setLoading(false);
