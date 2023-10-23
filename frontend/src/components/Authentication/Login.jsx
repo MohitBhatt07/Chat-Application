@@ -18,7 +18,6 @@ const Login = () => {
   };
   
   const submitHandler = async(event) => {
-    
     event.preventDefault();
     setLoading(true);
     
@@ -35,17 +34,18 @@ const Login = () => {
         },
       };
       
-      const {data} = await axios.post(
+      const data = await axios.post(
         "/api/user/login",
         {email,password},
-        config[0]
+        config
       );
+      
       toast.success("LOGIN SUCCESSFULL");
       localStorage.setItem('userInfo',JSON.stringify(data));
       setLoading(false);
       navigate("/chatpage");
     } catch (err) {
-      toast.error(`${err}`);
+      toast.error(`Invalid emailid or Password`);
       setLoading(false);
     }
   };
@@ -60,7 +60,7 @@ const Login = () => {
           type="email"
           className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
           placeholder="Email address"
-          onChange={(e) => setEmail(e)}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </div>
 
@@ -73,7 +73,7 @@ const Login = () => {
           type={show ? "text" : "password"}
           className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
           placeholder="Password"
-          onChange={(e) => setPassword(e)}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <div
           className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 "
