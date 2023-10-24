@@ -4,7 +4,8 @@ const dotenv = require('dotenv');
 const app = express();
 const cors = require('cors');
 const connectDB = require("./config/db");
-const userRoutes = require("./routes/userRoutes")
+const userRoutes = require("./routes/userRoutes");
+const chatRoutes = require('./routes/chatRoutes');
 const {notFound , errorHandler} = require("./middleware/errorMiddleware");
 
 app.use(cors({
