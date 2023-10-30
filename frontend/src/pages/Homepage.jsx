@@ -2,10 +2,21 @@ import React, { useState } from "react";
 import Signup from "../components/Authentication/Signup";
 import Login from "../components/Authentication/Login";
 import Logo from '../assets/chatAppLogo.jpg';
-import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
 
 const Homepage = () => {
   const [isSignup ,setIsSignup] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    setUser(userInfo);
+
+    if(!userInfo){
+      navigate('/chatpage');
+    }
+  },[navigate])
 
   return (
     <section className="bg-white w-1/2 max-sm:w-3/4 relative h-3/4  mx-auto mt-5 dark:bg-gray-900 rounded-lg">
