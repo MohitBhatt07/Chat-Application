@@ -7,7 +7,11 @@ const Chatpage = () => {
   
   return (
     <div className='h-screen'>
-      
+      {user}
+      <div>
+        { user}
+        {user }  
+      </div> 
     </div>
     
   )

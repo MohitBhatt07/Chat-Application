@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import Signup from "../components/Authentication/Signup";
 import Login from "../components/Authentication/Login";
 import Logo from '../assets/chatAppLogo.jpg';
@@ -11,11 +11,10 @@ const Homepage = () => {
 
   useEffect(()=>{
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    setUser(userInfo);
 
     if(!userInfo){
       navigate('/chatpage');
-    }
+    }y45
   },[navigate])
 
   return (
