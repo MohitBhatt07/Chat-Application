@@ -13,8 +13,8 @@ const Homepage = () => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     if(!userInfo){
-      navigate('/chatpage');
-    }y45
+      navigate('/');
+    }
   },[navigate])
 
   return (
