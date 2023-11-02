@@ -9,13 +9,14 @@ const ChatProvider = ({children}) =>{
 
   useEffect(()=>{
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    setUser(userInfo.data._id);
+    setUser(userInfo);
 
     if(!userInfo){
       navigate('/');
     }
-  },[navigate])
-  return <ChatContext.Provider value={[user]}>
+  },[navigate]);
+  
+  return <ChatContext.Provider value={{user ,setUser}}>
     {children}
   </ChatContext.Provider>
 }
