@@ -7,7 +7,7 @@ const SideDrawer = () => {
   const [loadingChat,setLoadingChat] = useState(false);
   
   return (
-    <div>SideDrawer</div>
+    <div className='inline-block'>SideDrawer</div>
   )
 }
 
