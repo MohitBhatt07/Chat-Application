@@ -1,7 +1,7 @@
 import React, { useState ,useEffect} from "react";
 import Signup from "../components/Authentication/Signup";
 import Login from "../components/Authentication/Login";
-import Logo from '../assets/chatAppLogo.jpg';
+import Logo from '../assets/chatAppLogo.png';
 import { useNavigate } from "react-router-dom";
 
 
