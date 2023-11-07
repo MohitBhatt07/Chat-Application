@@ -3,6 +3,8 @@ import Tooltips from "./Tooltip";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import CircleNotificationsRoundedIcon from "@mui/icons-material/CircleNotificationsRounded";
 import Logo from "../../assets/chatAppLogo.png";
+import ProfileModal from "./ProfileModal";
+import { useNavigate } from "react-router-dom";
 
 const SideDrawer = ({ userData }) => {
   const userImage = userData.data.pic;
@@ -10,7 +12,13 @@ const SideDrawer = ({ userData }) => {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
+  const logoutHandler = ()=>{
+    localStorage.removeItem('userInfo');
+    navigate('/');
+  }
   return (
     <>
       <div className="flex justify-between bg-white p-4 ">
@@ -31,10 +39,11 @@ const SideDrawer = ({ userData }) => {
         <div className="flex justify-center items-center h-9 gap-6">
           <CircleNotificationsRoundedIcon fontSize='large' className="hover:cursor-pointer"/>
           <div className="">
-            <button className="text-orange-400 font-bold h-[75px] border-l-2 border-r rounded-md border-gray-100 px-2 hover:shadow-md  hover:shadow-gray-400">
+            <button onClick={() => setShowModal(true)} className="text-orange-400 font-bold h-[75px] border-l-2 border-r rounded-md border-gray-100 px-2 hover:shadow-md  hover:shadow-gray-400">
               My Profile
             </button>
-            <button className="text-orange-400 font-bold h-[75px] border-l-2 border-r rounded-md px-2 border-gray-100 hover:shadow-md hover:shadow-gray-400">
+            {showModal ?<ProfileModal setModalStatus={setShowModal}/> :null}
+            <button onClick={logoutHandler} className="text-orange-400 font-bold h-[75px] border-l-2 border-r rounded-md px-2 border-gray-100 hover:shadow-md hover:shadow-gray-400">
               SignOut
             </button>
           </div>
