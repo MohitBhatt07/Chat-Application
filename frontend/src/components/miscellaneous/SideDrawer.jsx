@@ -5,6 +5,7 @@ import CircleNotificationsRoundedIcon from "@mui/icons-material/CircleNotificati
 import Logo from "../../assets/chatAppLogo.png";
 import ProfileModal from "./ProfileModal";
 import { useNavigate } from "react-router-dom";
+import Drawer from "./Drawer";
 
 const SideDrawer = ({ userData }) => {
   const userImage = userData.data.pic;
@@ -13,6 +14,7 @@ const SideDrawer = ({ userData }) => {
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const navigate = useNavigate();
 
   const logoutHandler = ()=>{
@@ -23,7 +25,7 @@ const SideDrawer = ({ userData }) => {
     <>
       <div className="flex justify-between bg-white p-4 ">
         <Tooltips message={"search the user"}>
-          <button className="bg-white rounded-lg w-40 flex items-center justify-items-center gap-10 p-1 border-2 shadow-sm shadow-slate-500">
+          <button className="bg-white rounded-lg w-40 flex items-center justify-items-center gap-10 p-1 border-2 shadow-sm shadow-slate-500" onClick={()=>setIsDrawerOpen(true)}>
             <SearchRoundedIcon fontSize="small" className="" />
             <span className="text-gray-500 ">Search</span>
           </button>
@@ -53,6 +55,9 @@ const SideDrawer = ({ userData }) => {
           ></img>
         </div>
       </div>
+      <Drawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen}>
+        <h1> This is drawer</h1>
+      </Drawer>
     </>
   );
 };
