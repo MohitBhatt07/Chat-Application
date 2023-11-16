@@ -1,6 +1,7 @@
 import React from "react";
 
 export default function Drawer({ children, isOpen, setIsOpen }) {
+ 
   return (
     <main
       className={
@@ -12,12 +13,12 @@ export default function Drawer({ children, isOpen, setIsOpen }) {
     >
       <section
         className={
-          " w-screen max-w-lg left-0 absolute bg-white h-full shadow-xl delay-400 duration-500 ease-in-out transition-all transform  " +
+          " w-[400px] max-w-lg left-0 absolute bg-white h-full shadow-xl delay-400 duration-500 ease-in-out transition-all transform  " +
           (isOpen ? "-translate-x-0 " : " -translate-x-full ")
         }
       >
-        <article className="relative w-screen max-w-lg pb-10 flex flex-col space-y-6  h-full">
-          <header className="p-4 font-bold text-lg">Header</header>
+        <article className="relative  max-w-lg pb-10 flex flex-col space-y-6  h-full">
+          <header className="p-4 font-bold text-3xl border rounded-lg shadow-md text-blue-400 flex m-2">Find Users</header>
           {children}
         </article>
       </section>
