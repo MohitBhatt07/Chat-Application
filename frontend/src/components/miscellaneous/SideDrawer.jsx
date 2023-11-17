@@ -7,11 +7,12 @@ import ProfileModal from "./ProfileModal";
 import { useNavigate } from "react-router-dom";
 import Drawer from "./Drawer";
 import { toast } from "react-toastify";
-import ErrorIcon from "@mui/icons-material/Error";
+
+import ChatLoading from "./ChatLoading";
 
 const SideDrawer = ({ userData }) => {
   const userImage = userData.data.pic;
-  const [search, setSearch] = useState();
+  const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
@@ -25,7 +26,7 @@ const SideDrawer = ({ userData }) => {
     navigate("/");
   };
 
-  const searchUsers = () => {
+  const searchUsers = async () => {
     if (!search) {
       toast.warn("Enter something in search", {
         position: "top-right",
@@ -38,6 +39,34 @@ const SideDrawer = ({ userData }) => {
         theme: "colored",
       });
     }
+
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        },
+      };
+      const { data } = await axios.get(`/api/user?search=${search}`, config);
+      console.log('yes');
+      setLoading(false);
+      setSearchResult(data);
+      
+    } catch (error) {
+      
+      toast.error("Failed to load results", {
+        position: "top-right",
+        autoClose: 400,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+  
+    }
+    
   };
 
   return (
@@ -94,10 +123,15 @@ const SideDrawer = ({ userData }) => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button onClick={searchUsers} className="w-20 rounded-lg bg-orange-300 hover:bg-orange-200">Search</button>
-          
+          <button
+            type="button"
+            onClick={searchUsers}
+            className="w-20 rounded-lg bg-orange-300 hover:bg-orange-200"
+          >
+            Search
+          </button>
         </div>
-        
+        {loading ? <ChatLoading /> : <div>results</div>}
       </Drawer>
     </>
   );
