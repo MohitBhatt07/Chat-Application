@@ -9,6 +9,10 @@ import Drawer from "./Drawer";
 import { toast } from "react-toastify";
 
 import ChatLoading from "./ChatLoading";
+import axios from "axios";
+import ChatLoadingMultiple from "./ChatLoading";
+import ChatSearchList from "./ChatSearchList";
+import ChatSearchItem from "./ChatSearchList";
 
 const SideDrawer = ({ userData }) => {
   const userImage = userData.data.pic;
@@ -38,22 +42,26 @@ const SideDrawer = ({ userData }) => {
         progress: undefined,
         theme: "colored",
       });
+      return ;
     }
 
     try {
       setLoading(true);
+      
       const config = {
         headers: {
-          Authorization: `Bearer ${userData.token}`,
+          Authorization: `Bearer ${userData.data.token}`,
         },
       };
-      const { data } = await axios.get(`/api/user?search=${search}`, config);
-      console.log('yes');
-      setLoading(false);
+     
+      const  {data } = await axios.get(`/api/user?search=${search}`, config);
+      console.log(data);
+      setLoading(false)
+      
       setSearchResult(data);
       
     } catch (error) {
-      
+      setLoading(false);
       toast.error("Failed to load results", {
         position: "top-right",
         autoClose: 400,
@@ -68,7 +76,9 @@ const SideDrawer = ({ userData }) => {
     }
     
   };
+  const accessChat = (id)=>{
 
+  }
   return (
     <>
       <div className="flex justify-between bg-white p-4 ">
@@ -131,7 +141,14 @@ const SideDrawer = ({ userData }) => {
             Search
           </button>
         </div>
-        {loading ? <ChatLoading /> : <div>results</div>}
+        {loading ? <ChatLoadingMultiple /> :
+          <div className="m-0 h-full overflow-scroll scroll overflow-x-hidden">
+          {searchResult.map((curr,index)=>(
+            <ChatSearchItem key={index} user ={curr} handleFunction = {accessChat}/>
+          ))}
+          </div>
+        }
+        
       </Drawer>
     </>
   );

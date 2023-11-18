@@ -8,7 +8,7 @@ import ChatProvider from "./Context/ChatProvider";
 function App() {
   return (
     <div className="app">
-      {/* <BrowserRouter> */}
+      
         <ToastContainer
           position="top-right"
           autoClose={500}
@@ -21,13 +21,12 @@ function App() {
           pauseOnHover
           theme="light"
         />
-        {/* <ChatProvider> */}
+       
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/chatpage" element={<Chatpage />} />
           </Routes>
-        {/* </ChatProvider>
-      </BrowserRouter> */}
+     
     </div>
   );
 }
