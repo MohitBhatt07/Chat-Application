@@ -7,12 +7,10 @@ import ProfileModal from "./ProfileModal";
 import { useNavigate } from "react-router-dom";
 import Drawer from "./Drawer";
 import { toast } from "react-toastify";
-
-import ChatLoading from "./ChatLoading";
 import axios from "axios";
 import ChatLoadingMultiple from "./ChatLoading";
-import ChatSearchList from "./ChatSearchList";
 import ChatSearchItem from "./ChatSearchList";
+import { ChatState } from "../../Context/ChatProvider";
 
 const SideDrawer = ({ userData }) => {
   const userImage = userData.data.pic;
@@ -22,7 +20,7 @@ const SideDrawer = ({ userData }) => {
   const [loadingChat, setLoadingChat] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
+  const {setSelectedChat, chats,setChats} =ChatState();
   const navigate = useNavigate();
 
   const logoutHandler = () => {
@@ -55,7 +53,6 @@ const SideDrawer = ({ userData }) => {
       };
      
       const  {data } = await axios.get(`/api/user?search=${search}`, config);
-      console.log(data);
       setLoading(false)
       
       setSearchResult(data);
@@ -76,8 +73,32 @@ const SideDrawer = ({ userData }) => {
     }
     
   };
-  const accessChat = (id)=>{
-
+  const accessChat = async(id)=>{
+      try {
+        setLoadingChat(true);
+        const config = {
+          headers: {
+            "Content-type" : "application/json",
+            Authorization : `Bearer ${userData.data.token}`
+          }
+        };
+        const {data} = await axios.post(`/api/chat` , {userId} ,config);
+        setSelectedChat(data);
+        setLoadingChat(false);
+        setIsDrawerOpen(false);
+      } catch (error) {
+        toast.error("Error fetching the chats", {
+          position: "top-right",
+          autoClose: 400,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+        )
+      } 
   }
   return (
     <>
@@ -144,7 +165,7 @@ const SideDrawer = ({ userData }) => {
         {loading ? <ChatLoadingMultiple /> :
           <div className="m-0 h-full overflow-scroll scroll overflow-x-hidden">
           {searchResult.map((curr,index)=>(
-            <ChatSearchItem key={index} user ={curr} handleFunction = {accessChat}/>
+            <ChatSearchItem key={index} user ={curr} handleFunction = {()=>accessChat(curr._id)}/>
           ))}
           </div>
         }

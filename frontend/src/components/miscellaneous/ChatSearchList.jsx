@@ -2,7 +2,7 @@ import React from "react";
 
 const ChatSearchItem = ({ user }) => {
   return (
-    <div className="group w-[85%] bg-gray-200 border-blue-400 h-16 border rounded-md mx-3 mt-4 hover:cursor-pointer hover:bg-blue-400 hover:shadow-lg hover:shadow-green-300">
+    <div className="group w-[85%] bg-gray-200 border-blue-400 h-16 border rounded-md mx-3 mt-2 hover:cursor-pointer hover:bg-blue-400 hover:shadow-lg hover:shadow-green-300">
       <div className="flex  items-center h-full justify-evenly space-x-3">
         <div className="w-12 bg-gray-300 h-10 rounded-full  ">
           <img
