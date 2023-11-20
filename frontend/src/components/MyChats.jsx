@@ -1,5 +1,7 @@
-import React from 'react'
+import React,{useEffect, useState} from 'react'
 import { ChatState } from '../Context/ChatProvider'
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const MyChats = () => {
   const [loggedUser , setLoggedUser ] = useState();
@@ -7,17 +9,15 @@ const MyChats = () => {
   
   const fetchChats = async()=>{
     try {
-      setLoadingChat(true);
       const config = {
         headers: {
           "Content-type" : "application/json",
-          Authorization : `Bearer ${userData.data.token}`
+          Authorization : `Bearer ${user.data.token}`
         }
       };
-      const {data} = await axios.post(`/api/chat` , {userId} ,config);
-      setSelectedChat(data);
-      setLoadingChat(false);
-      setIsDrawerOpen(false);
+      const {data} = await axios.get(`/api/chat` ,config);
+      console.log(data);
+      setChats(data);
     } catch (error) {
       toast.error("Error fetching the chats", {
         position: "top-right",
@@ -32,8 +32,15 @@ const MyChats = () => {
       )
     }
   }
+
+  useEffect(()=>{
+    setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+    fetchChats();
+  },[])
   return (
-    <div>MyChats</div>
+    <div className='h-full w-1/3 shadow-2xl '>
+      <div className='h-full w-full bg-white'>ChatPage</div>
+    </div>
   )
 }
 

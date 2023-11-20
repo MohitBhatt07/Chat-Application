@@ -73,20 +73,25 @@ const SideDrawer = ({ userData }) => {
     }
     
   };
-  const accessChat = async(id)=>{
+  const accessChat = async(userId)=>{
       try {
         setLoadingChat(true);
+        
         const config = {
           headers: {
             "Content-type" : "application/json",
             Authorization : `Bearer ${userData.data.token}`
           }
         };
-        const {data} = await axios.post(`/api/chat` , {userId} ,config);
+        
+        const {data} = await axios.post("/api/chat" , {userId} ,config);
+        
         setSelectedChat(data);
         setLoadingChat(false);
         setIsDrawerOpen(false);
+
       } catch (error) {
+        
         toast.error("Error fetching the chats", {
           position: "top-right",
           autoClose: 400,
@@ -165,7 +170,7 @@ const SideDrawer = ({ userData }) => {
         {loading ? <ChatLoadingMultiple /> :
           <div className="m-0 h-full overflow-scroll scroll overflow-x-hidden">
           {searchResult.map((curr,index)=>(
-            <ChatSearchItem key={index} user ={curr} handleFunction = {()=>accessChat(curr._id)}/>
+            <ChatSearchItem key={index} isLoading={loadingChat} user ={curr} handleFunction = {()=>accessChat(curr._id)}/>
           ))}
           </div>
         }
