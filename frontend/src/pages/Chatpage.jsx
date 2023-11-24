@@ -12,7 +12,7 @@ const Chatpage = () => {
       {user && <SideDrawer userData = {user}/>}
       
 
-      <div className="flex h-[90%] justify-between"> 
+      <div className="flex h-[90%] gap-5 mt-2 px-4"> 
         {user && <MyChats/>}
         {user && <ChatBox/>}  
       </div> 
