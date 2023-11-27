@@ -84,11 +84,12 @@ const Signup = () => {
           "Content-type": "application/json",
         },
       };
-      const data = axios.post(
+      const data = await axios.post(
         "/api/user",
         { name, email, password, pic },
         config
       );
+      
       toast.success("REGISTRATION IS SUCCESSFULL");
       localStorage.setItem('userInfo',JSON.stringify(data));
       setLoading(false);

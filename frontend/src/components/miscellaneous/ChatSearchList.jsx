@@ -3,12 +3,7 @@ import LoadingSpinner from "./LoadingSpinner";
 
 const ChatSearchItem = ({ user ,handleFunction ,setIsLoading,isLoading}) => {
   const [load,setLoad] = useState(false);
-  // const handleLoad= ()=>{
-  //   setLoad(true);
-  //   console.log('yes');
-  //   handleFunction();
-  //   setTimeout(()=>setLoad(false),1000);
-  // }
+  
   return (
     <div onClick={handleFunction} className="relative group w-[85%] bg-gray-200 border-blue-400 h-16 border rounded-md mx-3 mt-2 hover:cursor-pointer hover:bg-blue-400 hover:shadow-lg hover:shadow-green-300">
       <div className="flex  items-center h-full justify-evenly space-x-3">
