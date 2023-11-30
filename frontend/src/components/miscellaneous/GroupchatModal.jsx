@@ -11,10 +11,10 @@ const GroupchatModal = ({setShowModal}) => {
   const [searchResults, setSearchResults]  = useState();
   const [loading,setLoading] = useState(false);
   const {user, chats,setChats} = ChatState();
-
+  
   
   return (
-    <ModalSheet title={"NEW GROUP"} setModalStatus={setShowModal}>
+    <ModalSheet title={"Create Group Chat"} setModalStatus={setShowModal}>
       <button
         className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
         type="button"
