@@ -47,16 +47,16 @@ const MyChats = () => {
   }, []);
   return (
     <div className="h-full w-1/3 shadow-2xl flex-2 rounded-2xl max-md:flex-1 ">
-      <div className="h-[95%] w-full rounded-2xl pt-5 pr-1 pb-2 bg-white ">
+      <div className="h-[100%] w-full rounded-2xl pt-5 pr-1  bg-white ">
         <div className="flex mx-5 justify-between">
           <span className="text-3xl">Chats</span>
           <button onClick={()=>setShowModal(true)} className="w-24 rounded-lg p-2 bg-orange-300 hover:bg-orange-200">
             Add group
           </button>
-          {showModal && <GroupchatModal setShowModal ={setShowModal} />}
+          {showModal && <GroupchatModal setModalStatus ={setShowModal} />}
         </div>
 
-        <div className="mt-5 h-[94%] w-full overflow-scroll">
+        <div className="mt-5 h-[88%] w-full overflow-scroll">
           {chats.map((chat, index) => (
             <div
               onClick={() => setSelectedChat(chat)}

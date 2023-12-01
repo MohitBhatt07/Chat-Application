@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 
-const ChatSearchItem = ({ user ,handleFunction ,setIsLoading,isLoading}) => {
+const ChatSearchItem = ({ user ,handleFunction}) => {
   const [load,setLoad] = useState(false);
   
   return (
