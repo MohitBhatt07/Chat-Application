@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { ChatState } from "../../Context/ChatProvider";
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
+import ProfileModal from "./ProfileModal";
+import UpdateGroupModal from "./UpdateGroupModal";
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, selectedChat, setSelectedChat } = ChatState();
- 
+  const [showProfile ,setShowProfile] = useState(false);
+  const [showGroupInfo ,setShowGroupInfo] = useState(false);
+
   return (
-    <>
+   <>
       { Object.keys(selectedChat).length !== 0 ? (
-        <div className="flex-1 px-2 py-[1px] sm:py-3 sm:px-6 justify-between flex flex-col ">
+        <div className="flex-1  px-2 py-[1px] sm:py-3 sm:px-6 justify-between flex flex-col ">
           <div className="flex sm:items-center justify-between pb-2 border-b-2 border-gray-200">
             <div className="relative h-12 flex items-center space-x-4 ">
               <button
@@ -16,16 +20,28 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               >
                 <ArrowBackSharpIcon />
               </button>
-              <div className="h-10">
+             
+              {!selectedChat.isGroupChat ? <div className="h-10" onClick={()=>setShowProfile(true)}>
                 <img
                   src={selectedChat.users[1].pic}
                   alt=""
-                  className="w-10 shadow-md  shadow-slate-700 sm:w-12 h-10 sm:h-12 rounded-full"
+                  className="w-10 shadow-md hover:cursor-pointer shadow-slate-700 sm:w-12 h-10 sm:h-12 rounded-full"
                 />
               </div>
+            :  
+            <div className="h-10" onClick={()=>setShowGroupInfo(true)}>
+                <img
+                  src={selectedChat.users[1].pic}
+                  alt=""
+                  className="w-10 shadow-md hover:cursor-pointer shadow-slate-700 sm:w-12 h-10 sm:h-12 rounded-full"
+                />
+              </div>
+            }
+              {showGroupInfo && <UpdateGroupModal fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} setModalStatus ={setShowGroupInfo} groupInfo = {selectedChat}/>}
+              {showProfile && <ProfileModal setModalStatus={setShowProfile} currUser={selectedChat.users[1]}/>}
               <div className="flex flex-col leading-tight">
                 <div className="text-xl mt-1 flex items-center">
-                  <span className="text-gray-700 mr-3">{selectedChat.users[1].name}</span>
+                  <span className="text-gray-700 mr-3">{selectedChat.isGroupChat ?selectedChat.chatName :selectedChat.users[1].name}</span>
                 </div>
               </div>
             </div>
@@ -204,7 +220,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           </div>
         </div>
       ) : (
-        <div className="m-auto text-4xl w-full">Click on user to start chatting</div>
+        <div className="m-auto text-4xl w-full max-md:hidden">Click on user to start chatting</div>
       )}
     </>
   );

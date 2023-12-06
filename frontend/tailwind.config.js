@@ -22,6 +22,7 @@ export default {
                 opacity: "1"
             }
         }
+    
     }
     },
     fontFamily : {

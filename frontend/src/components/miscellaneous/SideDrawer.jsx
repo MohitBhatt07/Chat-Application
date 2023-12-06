@@ -138,7 +138,7 @@ const SideDrawer = ({ userData }) => {
             >
               My Profile
             </button>
-            {showModal ? <ProfileModal setModalStatus={setShowModal} /> : null}
+            {showModal ? <ProfileModal setModalStatus={setShowModal}  currUser={userData.data}/> : null}
             <button
               onClick={logoutHandler}
               className="text-orange-400 font-bold h-[75px] border-l-2 border-r rounded-md px-2 border-gray-100 hover:shadow-md hover:shadow-gray-400"

@@ -7,7 +7,7 @@ import { getSender } from "./config/getUser";
 import GroupchatModal from "./miscellaneous/GroupchatModal";
 
 const MyChats = ({fetchAgain}) => {
-  const [loggedUser, setLoggedUser] = useState();
+  const [loggedUser, setLoggedUser] = useState({});
   const { user, chats, setChats, selectedChat, setSelectedChat } = ChatState();
   const [showModal ,setShowModal]  = useState(false);
   
@@ -44,12 +44,12 @@ const MyChats = ({fetchAgain}) => {
     setLoggedUser(userData.data);
 
     fetchChats();
-  }, [fetchAgain]);
+  }, []);
  
   // console.log(Object.keys(selectedChat).length);
-  
+ 
   return (
-    <div className={`h-full min-[769px]:w-1/3 shadow-2xl flex-2 rounded-2xl max-md:${Object.keys(selectedChat).length === 0 ? "w-[100%]" : "hidden"} `}>
+    <div className={`h-full min-[769px]:w-1/3 shadow-2xl flex-2 rounded-2xl max-md:${Object.keys(selectedChat).length === 0 ? "w-[100%]" : "hidden"}`}>
       <div className="h-[100%] w-full rounded-2xl pt-5 pr-1 bg-white ">
         <div className="flex mx-5 justify-between">
           <span className="text-3xl">Chats</span>
