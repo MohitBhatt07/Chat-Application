@@ -37,7 +37,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 />
               </div>
             }
-              {showGroupInfo && <UpdateGroupModal fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} setModalStatus ={setShowGroupInfo} groupInfo = {selectedChat}/>}
+              {showGroupInfo && <UpdateGroupModal fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} setModalStatus ={setShowGroupInfo}/>}
               {showProfile && <ProfileModal setModalStatus={setShowProfile} currUser={selectedChat.users[1]}/>}
               <div className="flex flex-col leading-tight">
                 <div className="text-xl mt-1 flex items-center">

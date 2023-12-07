@@ -44,7 +44,7 @@ const MyChats = ({fetchAgain}) => {
     setLoggedUser(userData.data);
 
     fetchChats();
-  }, []);
+  }, [fetchAgain]);
  
   // console.log(Object.keys(selectedChat).length);
  
