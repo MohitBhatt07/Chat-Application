@@ -7,6 +7,7 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require('./routes/chatRoutes');
 const {notFound , errorHandler} = require("./middleware/errorMiddleware");
+const messageRoutes = require("./routes/messageRoutes");
 
 app.use(cors({
   origin : "http://localhost:5173"
@@ -20,6 +21,8 @@ app.get("/", (req, res) => {
 
 app.use('/api/user' , userRoutes);
 app.use('/api/chat' , chatRoutes);
+app.use('/api/message' ,messageRoutes);
+
 app.use(notFound);
 app.use(errorHandler);
 const port = process.env.PORT || 5000;

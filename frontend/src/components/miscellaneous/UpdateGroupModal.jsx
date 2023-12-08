@@ -13,7 +13,7 @@ const UpdateGroupModal = ({
   fetchAgain,
   setFetchAgain,
   setModalStatus,
-  
+  fetchMessages
 }) => {
   const [updateGroupName, setUpdateGroupName] = useState(false);
   const [addMembers, setAddMembers] = useState(false);
@@ -148,6 +148,7 @@ const UpdateGroupModal = ({
       
       userId === user.data._id ? setSelectedChat({}) : setSelectedChat(data);
       setFetchAgain(!fetchAgain);
+      fetchMessages();
     }catch(err){
       toast.error("Failed to change name", {
         position: "top-right",

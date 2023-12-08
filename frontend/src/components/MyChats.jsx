@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ChatState } from "../Context/ChatProvider";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { getSender } from "./config/getUser";
+import { getSender } from "./config/ChatLogic";
 
 import GroupchatModal from "./miscellaneous/GroupchatModal";
 
