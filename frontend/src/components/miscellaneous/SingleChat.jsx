@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ChatState } from "../../Context/ChatProvider";
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
 import ProfileModal from "./ProfileModal";
@@ -9,8 +9,9 @@ import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import AttachmentOutlinedIcon from "@mui/icons-material/AttachmentOutlined";
 import axios from "axios";
 import { toast } from "react-toastify";
-import LoadingSpinner from "./LoadingSpinner";
 import LoadingChatSpinner from "./LoadingChatSpinner";
+import ScrollableChats from "./ScrollableChats";
+
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, selectedChat, setSelectedChat } = ChatState();
@@ -19,6 +20,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
+
+  
 
   const fetchMessages = async () => {
     if (Object.keys(selectedChat).length === 0) return;
@@ -40,7 +43,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     } catch (error) {
       toast.error("Failed to fetch message", {
         position: "top-right",
-        autoClose: 400,
+        autoClose: 400, 
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
@@ -72,7 +75,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
           config
         );
-        console.log(data);
 
         setMessages([...messages, data]);
       } catch (error) {
@@ -207,52 +209,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               </button>
             </div>
           </div>
-          <div className="h-[80%] bottom-0">
+          <div className="h-[85%] flex flex-col">
             {loading ? (
               <LoadingChatSpinner />
-            ) : (
-              <div
-                id="messages"
-                className="flex h-5/6 flex-col justify-end space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
-              >
-                <div className="chat-message">
-                  <div className="flex items-end">
-                    <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
-                      <div>
-                        <span className="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600">
-                          Can be verified on any platform using docker
-                        </span>
-                      </div>
-                    </div>
-                    <img
-                      src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-                      alt="My profile"
-                      className="w-6 h-6 rounded-full order-1"
-                    />
-                  </div>
-                </div>
-                <div className="chat-message">
-                  <div className="flex items-end justify-end">
-                    <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end">
-                      <div>
-                        <span className="px-4 py-2 rounded-lg inline-block rounded-br-none bg-blue-600 text-white ">
-                          Your error message says permission denied, npm global
-                          installs must be given root privileges.
-                        </span>
-                      </div>
-                    </div>
-                    <img
-                      src="https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-                      alt="My profile"
-                      className="w-6 h-6 rounded-full order-2"
-                    />
-                  </div>
-                </div>
-               
-                
-              </div>
-            )}
-            <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
+            ) : 
+              <ScrollableChats messages={messages}/>
+            }
+            <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 mt-2 sm:mb-0">
               <div className="relative flex">
                 <span className="absolute inset-y-0 flex items-center">
                   <button
