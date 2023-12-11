@@ -4,7 +4,7 @@ import { isFirstMessage, isLastMessage, isSameSender, isSameUser } from "../conf
 
 const ScrollableChats = ({ messages }) => {
   const messagesRef = useRef(null);
-
+  
   useEffect(() => {
     if (messagesRef.current) {
       messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
@@ -13,7 +13,10 @@ const ScrollableChats = ({ messages }) => {
 
   const { user } = ChatState();
   return (
-    <div ref={messagesRef} className="flex-1 overflow-y-auto px-8">
+    <div ref={messagesRef} className="flex-1  overflow-y-auto px-8 no-scrollbar">
+      {
+        messages.length <10 && <div className={`h-[90%] border-white border-2  w-full`}></div>
+      }
       {messages.map((currMessage, index) => (
         <div
           key={index}

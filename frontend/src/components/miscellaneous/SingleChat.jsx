@@ -11,6 +11,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import LoadingChatSpinner from "./LoadingChatSpinner";
 import ScrollableChats from "./ScrollableChats";
+import io from "socket.io-client";
+
+
+const ENDPOINT = "http://localhost:8000";
+let socket ,selectedChatCompare;
 
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -20,7 +25,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
-
+  const [socketConnected, setSocketConnected] = useState(false);
   
 
   const fetchMessages = async () => {
@@ -37,7 +42,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         `/api/message/${selectedChat._id}`,
         config
       );
-      console.log(messages);
+      
       setMessages(data);
       setLoading(false);
     } catch (error) {
@@ -55,8 +60,25 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   useEffect(() => {
+    console.log('fetching');
     fetchMessages();
   }, [selectedChat]);
+
+  useEffect(()=>{
+    socket = io(ENDPOINT ,{ transports : ['websocket'] });
+    socket.emit('setup',user.data);
+    socket.on('connection',()=>{setSocketConnected(true);});
+    // socket = io(ENDPOINT, {
+    //   transports: ["websocket"],
+    // });
+    // socket.on("connect", () => {
+    //   socket.emit("join", selectedChat._id);
+    // });
+    // socket.on("message", (message) => {
+    //   setMessages([...messages, message]);
+    // });
+  }, []);
+
   const sendMessage = async (event) => {
     if ((event.key === "Enter" || event.type === "click") && newMessage) {
       try {
@@ -77,6 +99,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         );
 
         setMessages([...messages, data]);
+        socket.emit("join chat" , selectedChat._id);
       } catch (error) {
         toast.error("Failed to send message", {
           position: "top-right",
@@ -213,6 +236,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             {loading ? (
               <LoadingChatSpinner />
             ) : 
+           
               <ScrollableChats messages={messages}/>
             }
             <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 mt-2 sm:mb-0">
