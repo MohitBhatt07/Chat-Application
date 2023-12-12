@@ -73,7 +73,7 @@ const MyChats = ({fetchAgain}) => {
               <div className="flex w-full items-center h-full justify-evenly space-x-3">
                 <div className="w-12 bg-gray-300 h-10 rounded-full  ">
                   <img
-                    src={chat.users[1].pic}
+                    src={getSender(loggedUser, chat.users).pic}
                     alt=""
                     className="object-cover w-full h-full rounded-full"
                   />
@@ -85,7 +85,7 @@ const MyChats = ({fetchAgain}) => {
                 >
                   <span className="w-fit h- 6 first-letter:capitalize rounded-md font-normal ">
                     {!chat.isGroupChat
-                      ? getSender(loggedUser, chat.users)
+                      ? getSender(loggedUser, chat.users).name
                       : chat.chatName}
                   </span>
                   {/* <span className="text-sm">{chat.users[1].email}</span> */}

@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import LoadingChatSpinner from "./LoadingChatSpinner";
 import ScrollableChats from "./ScrollableChats";
 import io from "socket.io-client";
+import { getSender } from "../config/ChatLogic";
 
 
 const ENDPOINT = "http://localhost:8000";
@@ -44,6 +45,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       );
       
       setMessages(data);
+      socket.emit("join chat" , selectedChat._id);
       setLoading(false);
     } catch (error) {
       toast.error("Failed to fetch message", {
@@ -59,15 +61,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
   };
 
-  useEffect(() => {
-    console.log('fetching');
-    fetchMessages();
-  }, [selectedChat]);
-
   useEffect(()=>{
     socket = io(ENDPOINT ,{ transports : ['websocket'] });
-    socket.emit('setup',user.data);
-    socket.on('connection',()=>{setSocketConnected(true);});
+    socket.emit("setup",user.data);
+    socket.on("connection",()=>{setSocketConnected(true);});
     // socket = io(ENDPOINT, {
     //   transports: ["websocket"],
     // });
@@ -79,6 +76,24 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     // });
   }, []);
 
+
+  useEffect(() => {
+    fetchMessages();
+    selectedChatCompare = selectedChat;
+  }, [selectedChat]);
+
+  useEffect(() => {
+    socket.on("message received", (newMessageRecieved) =>{
+      if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat._id){
+        
+      }
+      else{
+        setMessages([...messages, newMessageRecieved]);
+      }
+    })
+  })
+
+  
   const sendMessage = async (event) => {
     if ((event.key === "Enter" || event.type === "click") && newMessage) {
       try {
@@ -97,9 +112,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
           config
         );
-
+        
+        socket.emit("new message" , data);
         setMessages([...messages, data]);
-        socket.emit("join chat" , selectedChat._id);
+        
       } catch (error) {
         toast.error("Failed to send message", {
           position: "top-right",
@@ -134,7 +150,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               {!selectedChat.isGroupChat ? (
                 <div className="h-10" onClick={() => setShowProfile(true)}>
                   <img
-                    src={selectedChat.users[1].pic}
+                    src={getSender(user.data,selectedChat.users).pic}
                     alt=""
                     className="w-10 shadow-md hover:cursor-pointer shadow-slate-700 sm:w-12 h-10 sm:h-12 rounded-full"
                   />
@@ -159,7 +175,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               {showProfile && (
                 <ProfileModal
                   setModalStatus={setShowProfile}
-                  currUser={selectedChat.users[1]}
+                  currUser={getSender(user.data,selectedChat.users)}
                 />
               )}
               <div className="flex flex-col leading-tight">
@@ -167,7 +183,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   <span className="text-gray-700 mr-3">
                     {selectedChat.isGroupChat
                       ? selectedChat.chatName
-                      : selectedChat.users[1].name}
+                      : getSender(user.data,selectedChat.users).name}
                   </span>
                 </div>
               </div>
