@@ -3,7 +3,7 @@ import { ChatState } from "../Context/ChatProvider";
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
 import SingleChat from "./miscellaneous/SingleChat";
 const ChatBox = ({fetchAgain,setFetchAgain}) => {
-  const { user, selectedChat ,setSelectedChat} = ChatState();
+  const { selectedChat } = ChatState();
 
   return (
     <div

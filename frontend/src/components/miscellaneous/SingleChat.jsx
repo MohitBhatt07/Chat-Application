@@ -14,10 +14,8 @@ import ScrollableChats from "./ScrollableChats";
 import io from "socket.io-client";
 import { getSender } from "../config/ChatLogic";
 
-
 const ENDPOINT = "http://localhost:8000";
-let socket ,selectedChatCompare;
-
+var socket , selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, selectedChat, setSelectedChat } = ChatState();
@@ -27,10 +25,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const [socketConnected, setSocketConnected] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   
-
   const fetchMessages = async () => {
-    if (Object.keys(selectedChat).length === 0) return;
+    if (!selectedChat) return;
 
     try {
       const config = {
@@ -43,14 +42,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         `/api/message/${selectedChat._id}`,
         config
       );
-      
+
       setMessages(data);
-      socket.emit("join chat" , selectedChat._id);
+      
       setLoading(false);
+      socket.emit("join chat", selectedChat._id);
     } catch (error) {
       toast.error("Failed to fetch message", {
         position: "top-right",
-        autoClose: 400, 
+        autoClose: 400,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
@@ -61,41 +61,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
   };
 
-  useEffect(()=>{
-    socket = io(ENDPOINT ,{ transports : ['websocket'] });
-    socket.emit("setup",user.data);
-    socket.on("connection",()=>{setSocketConnected(true);});
-    // socket = io(ENDPOINT, {
-    //   transports: ["websocket"],
-    // });
-    // socket.on("connect", () => {
-    //   socket.emit("join", selectedChat._id);
-    // });
-    // socket.on("message", (message) => {
-    //   setMessages([...messages, message]);
-    // });
-  }, []);
-
-
-  useEffect(() => {
-    fetchMessages();
-    selectedChatCompare = selectedChat;
-  }, [selectedChat]);
-
-  useEffect(() => {
-    socket.on("message received", (newMessageRecieved) =>{
-      if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat._id){
-        
-      }
-      else{
-        setMessages([...messages, newMessageRecieved]);
-      }
-    })
-  })
-
-  
   const sendMessage = async (event) => {
     if ((event.key === "Enter" || event.type === "click") && newMessage) {
+      socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
           headers: {
@@ -112,10 +80,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
           config
         );
-        
-        socket.emit("new message" , data);
+
+        socket.emit("new message", data);
         setMessages([...messages, data]);
-        
       } catch (error) {
         toast.error("Failed to send message", {
           position: "top-right",
@@ -129,10 +96,56 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         });
       }
     }
-  };
+  }; 
+
+  useEffect(() => {
+    socket = io(ENDPOINT, { transports: ["websocket"] });
+    socket.emit("setup", user.data);
+    socket.on("connected", () => setSocketConnected(true));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
+  }, []);
+
+  useEffect(() => {
+    fetchMessages();
+    selectedChatCompare = selectedChat;
+  }, [selectedChat]);
+
+  useEffect(() => {
+    console.log(messages);
+    socket.on("message received", (newMessageRecieved) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageRecieved.chat._id
+      ) {
+        console.log("empty chat");
+      } else {
+        setMessages([...messages, newMessageRecieved]);
+      }
+    });
+  });
+
+  
 
   const typingHandler = (event) => {
     setNewMessage(event.target.value);
+    if (!socketConnected) return;
+    
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", selectedChat._id);
+    }
+    let lastTypingTime = new Date().getTime();
+    const  timerLength = 3000;
+    setTimeout(() => {
+      let timeNow = new Date().getTime();
+      let timeDiff = timeNow - lastTypingTime;
+
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", selectedChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
   };
   return (
     <>
@@ -150,7 +163,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               {!selectedChat.isGroupChat ? (
                 <div className="h-10" onClick={() => setShowProfile(true)}>
                   <img
-                    src={getSender(user.data,selectedChat.users).pic}
+                    src={getSender(user.data, selectedChat.users).pic}
                     alt=""
                     className="w-10 shadow-md hover:cursor-pointer shadow-slate-700 sm:w-12 h-10 sm:h-12 rounded-full"
                   />
@@ -175,7 +188,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               {showProfile && (
                 <ProfileModal
                   setModalStatus={setShowProfile}
-                  currUser={getSender(user.data,selectedChat.users)}
+                  currUser={getSender(user.data, selectedChat.users)}
                 />
               )}
               <div className="flex flex-col leading-tight">
@@ -183,9 +196,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   <span className="text-gray-700 mr-3">
                     {selectedChat.isGroupChat
                       ? selectedChat.chatName
-                      : getSender(user.data,selectedChat.users).name}
+                      : getSender(user.data, selectedChat.users).name}
                   </span>
                 </div>
+                {isTyping && <span>TYPING....</span>}
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -251,10 +265,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           <div className="h-[85%] flex flex-col">
             {loading ? (
               <LoadingChatSpinner />
-            ) : 
-           
-              <ScrollableChats messages={messages}/>
-            }
+            ) : (
+              <ScrollableChats messages={messages} />
+            )}
             <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 mt-2 sm:mb-0">
               <div className="relative flex">
                 <span className="absolute inset-y-0 flex items-center">

@@ -4,7 +4,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import { ChatState } from "../../Context/ChatProvider";
 
 const ProfileModal = ({ setModalStatus ,currUser}) => {
-  console.log(currUser);
+
   const {user} =ChatState();
   return (
     <ModalSheet setModalStatus={setModalStatus}>
